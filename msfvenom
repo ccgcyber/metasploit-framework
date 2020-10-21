@@ -8,6 +8,11 @@ class UsageError < MsfVenomError; end
 require 'optparse'
 require 'timeout'
 
+# Silences warnings as they only serve to confuse end users
+if defined?(Warning) && Warning.respond_to?(:[]=)
+  Warning[:deprecated] = false
+end
+
 msfbase = __FILE__
 while File.symlink?(msfbase)
   msfbase = File.expand_path(File.readlink(msfbase), File.dirname(msfbase))
@@ -44,10 +49,10 @@ def init_framework(create_opts={})
   ]
 
   create_opts[:module_types].map! do |type|
-    type = Msf.const_get("MODULE_#{type.upcase}")
+    Msf.const_get("MODULE_#{type.upcase}")
   end
 
-  @framework = ::Msf::Simple::Framework.create
+  @framework = ::Msf::Simple::Framework.create(create_opts)
 end
 
 # Cached framework object
@@ -99,6 +104,12 @@ def parse_args(args)
 
   opt.on('-e', '--encoder         <encoder>', String, 'The encoder to use (use --list encoders to list)') do |e|
     opts[:encoder] = e
+  end
+
+  opt.on('--service-name    <value>', String, 'The service name to use when generating a service binary') do |s|
+    opts[:servicename] = s
+    opts[:sub_method] = true # Needed to ensure that to_win32pe_service() will call
+                             # exe_sub_method() for x86 binaries, not needed and ignored for x64 binaries.
   end
 
   opt.on('--sec-name        <value>', String, 'The new section name to use when generating large Windows binaries. Default: random 4-character alpha string') do |s|

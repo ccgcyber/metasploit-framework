@@ -24,7 +24,6 @@ class MetasploitModule < Msf::Auxiliary
           for arbitrary file download.
           Verified against 4.1.11-200316, 3.15.0-181008, 3.9.0-180604, 3.6.0-180328,
           3.0.0-171222, and 2.70.0-170921.
-
         },
         'License' => MSF_LICENSE,
         'Author' =>
@@ -46,7 +45,7 @@ class MetasploitModule < Msf::Auxiliary
             ['URL', 'https://www.secsignal.org/en/news/cve-2019-9960-arbitrary-file-download-in-limesurvey/'],
             ['URL', 'https://github.com/LimeSurvey/LimeSurvey/commit/1ed10d3c423187712b8f6a8cb2bc9d5cc3b2deb8']
           ],
-        'DisclosureDate' => 'Apr 02 2020'
+        'DisclosureDate' => '2020-04-02'
       )
     )
 
